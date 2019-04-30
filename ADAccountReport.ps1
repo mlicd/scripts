@@ -9,7 +9,7 @@
 #              Directory. Includes basic check of LogonHours which is a 
 #              Byte Array. Also provides some decoding for the 
 #              useraccountcontrol flags. Requires Active Directory PowerShell 
-#              module. CSV file will be written to your desktop.
+#              module.
 #
 #              6/11/2014 Changes - AD PowerShell provides handy virtual attributes for
 #              some hard to translate settings such as:

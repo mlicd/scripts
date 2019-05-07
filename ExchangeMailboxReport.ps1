@@ -13,11 +13,11 @@ $result = foreach ($mailbox in $mailboxes)
      Name = $mailbox.DisplayName
      Logon = $mailbox.samaccountname
      UPN = $mailbox.UserPrincipalName
-     LastLogon = (Get-MailboxStatistics $mailbox).LastLogonTime
-     ItemCount = (Get-MailboxStatistics $mailbox).ItemCount
-     TotalSize = (Get-MailboxStatistics $mailbox).TotalItemSize
+     LastLogon = (Get-MailboxStatistics $mailbox.identity).LastLogonTime
+     ItemCount = (Get-MailboxStatistics $mailbox.identity).ItemCount
+     TotalSize = (Get-MailboxStatistics $mailbox.identity).TotalItemSize
      TotalDeletedItems = (Get-MailboxStatistics $mailbox).TotalDeletedItemSize
-     DB = (Get-MailboxStatistics $mailbox).Database
+     DB = (Get-MailboxStatistics $mailbox.identity).Database
      SendQuota = $mailbox.ProhibitSendQuota
      SendReceiveQuota = $mailbox.ProhibitSendReceiveQuota
   }

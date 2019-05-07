@@ -6,8 +6,13 @@
 # Swap other Recipient Types to gather that data instead of user mailboxes:
 #  { $_.recipienttypedetails -eq "sharedmailbox" }
 #  { $_.recipienttypedetails -eq "roommailbox" }
+#
+# Report tip: If you import this data into Excel, you can create a handy TotalSizeBytes column based on the TotalSize that
+#             strips out the extra alpha characters and parentheses. 
+#             Use this formating formula, assuming your new column is Column G and TotalSize is Column F: 
+#             =VALUE(MID(F2,SEARCH("(",F2)+1,SEARCH(")",F2) - SEARCH("(",F2)-6))
+#             23.66 GB (25,407,949,615 bytes) --> becomes --> 25,407,949,615   now you can sort on this column in correct numerical order
 
-# This can take a while.
 $mailboxes = get-mailbox -ResultSize Unlimited | where { $_.recipienttypedetails -eq "usermailbox" }
 $result = foreach ($mailbox in $mailboxes)
 {

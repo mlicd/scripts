@@ -27,6 +27,8 @@ $result = foreach ($mailbox in $mailboxes)
      TotalSize = (Get-MailboxStatistics $mailbox.identity).TotalItemSize
      TotalDeletedItems = (Get-MailboxStatistics $mailbox.identity).TotalDeletedItemSize
      DB = (Get-MailboxStatistics $mailbox.identity).Database
+     Department = (get-aduser -identity $mailbox.samaccountname -properties Department).department
+     Location = (get-aduser -identity $mailbox.samaccountname -properties Office).office
      SendQuota = $mailbox.ProhibitSendQuota
      SendReceiveQuota = $mailbox.ProhibitSendReceiveQuota
   }

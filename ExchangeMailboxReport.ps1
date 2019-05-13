@@ -33,7 +33,7 @@ $result = foreach ($mailbox in $mailboxes)
      SendReceiveQuota = $mailbox.ProhibitSendReceiveQuota
   }
 
-New-Object PsObject -Property $Hash | Select-Object Name,Logon,UPN,AccountEnabled,MailboxEnabled,LastLogon,ItemCount,TotalSize,TotalDeletedItems,DB,SendQuota,SendReceiveQuota
+New-Object PsObject -Property $Hash | Select-Object Name,Logon,UPN,AccountEnabled,MailboxEnabled,LastLogon,ItemCount,TotalSize,TotalDeletedItems,DB,Department,Location,SendQuota,SendReceiveQuota
 
 }
 

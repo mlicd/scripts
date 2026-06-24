@@ -1,6 +1,6 @@
 ﻿#========================================================================
 # Created on:   8/16/2013
-# Revised on:   6/11/2014
+# Revised on:   6/23/2026
 # Created by:   Marty Lichtel
 # 
 # Filename: ADAccountReport.ps1
@@ -18,8 +18,9 @@
 #              - PasswordNeverExpires    (now using to see if account flagged to expire or not)
 #              - LastLogonDate
 #
-# Scratch list of attributes I am interested in:
-# name,samaccountname,enabled,accountexpirationdate,logonhours,whencreated,whenchanged,pwdlastset,useraccountcontrol,distinguishedname
+#			   6/23/2026 Changes - Optimized by selecting explicit properties not all, and
+#              use single [PSCustomObject]@{}
+#
 #========================================================================
 
 Import-Module ActiveDirectory
@@ -33,7 +34,16 @@ $OutputFile = "AccountReport.csv"
 
 Write-Host "`nCollecting data from $OUName ..." -ForegroundColor yellow
 
-$ObjectSet = Get-ADUser -LdapFilter "(ObjectCategory=User)" -SearchBase $OUName -properties *
+$PropertiesNeeded = @(
+    'name','samaccountname','employeeID','enabled','LastLogonDate',
+    'PasswordNeverExpires','PasswordLastSet','accountexpirationdate',
+    'logonhours','whencreated','whenchanged','useraccountcontrol','distinguishedname',
+    'extensionAttribute1','extensionAttribute2','extensionAttribute3','extensionAttribute4',
+    'extensionAttribute5','extensionAttribute6','extensionAttribute7','extensionAttribute8',
+    'extensionAttribute9','extensionAttribute10','extensionAttribute11','extensionAttribute12',
+    'extensionAttribute13','extensionAttribute14','extensionAttribute15'
+)
+$ObjectSet = Get-ADUser -LdapFilter "(ObjectCategory=User)" -SearchBase $OUName -Properties $PropertiesNeeded
 #$ObjectSet = Get-ADGroup -LdapFilter "(ObjectCategory=Group)" -SearchBase $OUName -properties *
 
 Write-Host "`nProcessing data ..." -ForegroundColor yellow
@@ -72,29 +82,29 @@ $result = foreach ($accountObject in $ObjectSet) {
 	#} # switch
 	# -------------------------------------------------------------------------------------------------
 	
-	$AttributesHashTable = @{
-  		Name = $accountObject.name
-		samAccountName = $accountObject.samaccountname
-		EmployeeID = $accountObject.employeeID
-		Enabled = $accountObject.enabled
-		LastLogonDate = $accountObject.LastLogonDate
+	[PSCustomObject]@{
+		Name                 = $accountObject.name
+		samAccountName       = $accountObject.samaccountname
+		EmployeeID           = $accountObject.employeeID
+		Enabled              = $accountObject.enabled
+		LastLogonDate        = $accountObject.LastLogonDate
 		PasswordNeverExpires = $accountObject.PasswordNeverExpires
-		PasswordLastSet = $accountObject.PasswordLastSet
-		AccountExpiration = $accountObject.accountexpirationdate
-		LogonHours = $DescLogonHours
-		WhenCreated = $accountObject.whencreated
-		WhenChanged = $accountObject.whenchanged
-		UserAccountControl = $accountObject.useraccountcontrol
-		DistinguishedName = $accountObject.distinguishedname
-		extensionAttribute1 = $accountObject.extensionAttribute1
-		extensionAttribute2 = $accountObject.extensionAttribute2
-		extensionAttribute3 = $accountObject.extensionAttribute3
-		extensionAttribute4 = $accountObject.extensionAttribute4
-		extensionAttribute5 = $accountObject.extensionAttribute5
-		extensionAttribute6 = $accountObject.extensionAttribute6
-		extensionAttribute7 = $accountObject.extensionAttribute7
-		extensionAttribute8 = $accountObject.extensionAttribute8
-		extensionAttribute9 = $accountObject.extensionAttribute9
+		PasswordLastSet      = $accountObject.PasswordLastSet
+		AccountExpiration    = $accountObject.accountexpirationdate
+		LogonHours           = $DescLogonHours
+		WhenCreated          = $accountObject.whencreated
+		WhenChanged          = $accountObject.whenchanged
+		UserAccountControl   = $accountObject.useraccountcontrol
+		DistinguishedName    = $accountObject.distinguishedname
+		extensionAttribute1  = $accountObject.extensionAttribute1
+		extensionAttribute2  = $accountObject.extensionAttribute2
+		extensionAttribute3  = $accountObject.extensionAttribute3
+		extensionAttribute4  = $accountObject.extensionAttribute4
+		extensionAttribute5  = $accountObject.extensionAttribute5
+		extensionAttribute6  = $accountObject.extensionAttribute6
+		extensionAttribute7  = $accountObject.extensionAttribute7
+		extensionAttribute8  = $accountObject.extensionAttribute8
+		extensionAttribute9  = $accountObject.extensionAttribute9
 		extensionAttribute10 = $accountObject.extensionAttribute10
 		extensionAttribute11 = $accountObject.extensionAttribute11
 		extensionAttribute12 = $accountObject.extensionAttribute12
@@ -102,12 +112,6 @@ $result = foreach ($accountObject in $ObjectSet) {
 		extensionAttribute14 = $accountObject.extensionAttribute14
 		extensionAttribute15 = $accountObject.extensionAttribute15
 	}
-  	
-	# Select-Object is necessary to provide explicit order for output, hash table is not guaranteed to output in any particular order
-	New-Object PsObject -Property $AttributesHashTable | Select-Object Name,samAccountName,EmployeeID,Enabled,LastLogonDate,PasswordNeverExpires,AccountExpiration,LogonHours, `
-		WhenCreated,WhenChanged,UserAccountControl,DistinguishedName,extensionAttribute1,extensionAttribute2,extensionAttribute3, extensionAttribute4, `
-		extensionAttribute5, extensionAttribute6, extensionAttribute7, extensionAttribute8, extensionAttribute9, extensionAttribute10, extensionAttribute11, `
-		extensionAttribute12, extensionAttribute13, extensionAttribute14, extensionAttribute15
 	
 } # foreach	
 
@@ -123,4 +127,3 @@ Write-Host "`n"
 # $UAC_DONT_EXPIRE = 65536
 # $UAC_TRUST_FOR_DELEG = 524288
 # $UAC_USE_DES_ONLY = 2097152
-

@@ -1,7 +1,7 @@
 # Okta Event Types Reference
 
 Helpful for event analysis in your SIEM.
-Event types that commonly appear in the `Action` column (sourced from `eventType_s`).
+Event types that commonly appear in `eventType_s`)
 
 ## Authentication Events
 
@@ -64,18 +64,6 @@ Event types that commonly appear in the `Action` column (sourced from `eventType
 | `security.threat.detected` | Okta ThreatInsight flagged suspicious activity |
 | `security.session.detect` | Anomalous session behavior detected |
 | `user.account.report_suspicious_activity_by_enduser` | User reported they did not perform an action |
-
----
-
-## Relevance to the KQL Queries
-
-**Per-event view** — All of the above can appear in the `Action` column since every Okta log entry is a row.
-
-**Session-joined view** — Only these primary events appear (MFA sub-events are rolled up into `MfaStatus`):
-- `user.session.start`
-- `user.authentication.sso`
-- `app.auth.sso`
-- `user.authentication.auth_via_IDP`
 
 ---
 

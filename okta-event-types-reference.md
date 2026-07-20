@@ -1,7 +1,7 @@
 # Okta Event Types Reference
 
 Helpful for event analysis in your SIEM.
-Event types that commonly appear in `eventType_s`)
+Event types that commonly appear in `eventType_s`
 
 ## Authentication Events
 

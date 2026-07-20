@@ -78,7 +78,9 @@ Each event has a `Result` column (from `outcome_result_s`):
 | `SKIPPED` | Action was skipped by policy |
 | `UNKNOWN` | Outcome could not be determined |
 
-## Common Failure Reasons (`outcome_reason_s`)
+## Common Failure Reasons
+
+From  (`outcome_reason_s`)
 
 | Reason | Context |
 |---|---|
